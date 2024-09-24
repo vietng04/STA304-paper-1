@@ -92,12 +92,14 @@ Here we briefly describe the Bayesian analysis model used to investigate... Back
 
 ## Model set-up
 We aim to establish a statistical model that explains the variation in flying time based on the simulated weight of penguins. The relationship can be formally described as:
-\begin{align} y_i &= \beta_0 + \beta_1 \cdot \text{weight}_i + \epsilon_i \ \epsilon_i &\sim \mbox{Normal}(0, \sigma) \end{align}
 
-y_i is the flying time for the ith penguin
-\beta_0 is the intercept,
-\beta_1 represents the effect of weight on flying time,
-\epsilon_i is the error term, assumed to be normally distributed
+\begin{align} 
+y_i & = \beta_0 + \beta_1 \cdot \text{weight}_i + \epsilon_i \\ 
+\beta_0 & \text{ is the intercept,} \\ 
+\beta_1 & \text{ represents the effect of weight on flying time,} \\ 
+\epsilon_i & \text{ is the error term, assumed to be normally distributed.} 
+\end{align}
+
 
 
 Define $y_i$ as the number of seconds that the plane remained aloft. Then $\beta_i$ is the wing width and $\gamma_i$ is the wing length, both measured in millimeters.  
@@ -161,15 +163,19 @@ lm(flying_time ~ weight, data=simulated_data)
 
 ## First discussion point {#sec-first-point}
 
-If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this. 
+The analysis of the simulated penguin data, particularly focusing on the relationship between weight and flying time, has led to several key insights. The model suggests a significant association between penguin weight and their flying time, where increases in weight tend to reduce the time spent. This fidings aligns with intuitive biological expectations, as heavier penguins likely face greater maintaining prolonged flight compared to their lighter counterparts.
 
+The linear model. which modeled flying time as a function of weight, demonstrated that even small changes in weight can have a measurable impact on flight duration. These results provide a quantitative basis for understanding the constraints on fligth that weight imposes, potentially influencing the energy expenditure and behavior of penguins during flight.
 ## Second discussion point
 
 ## Third discussion point
 
 ## Weaknesses and next steps
 
-Weaknesses and next steps should also be included.
+The data set used for this analysis is simulated, meaning the results might not reflect actual biological processes in penguins. Although the simulation aimed to mimic realistic relationships between the variables, empirical data would provide stronger evidence for the conclusions drawn. In addition, the variable weight is not an original measurement of the penguins, it was derived by the using the length variable from the analysis data. While weight is a critical factor for understanding the bio mechanics of flight in real-world scenarios, in this case, its simulation introduces a potential source of bias. The weight does not have direct empirical support from real measurements, and any patterns or correlations identified between weight and flying time may be artifacts of the way the data was generated. This could affect the generalizability of the results to real-world penguin flight dynamics.
+
+Additionally, because weight and length are related in the simulated data, the true variablility in weight that might exist in real penguin populations is not captured. This limitation needs to be considered when interpreting the findings, as the strength of the realtionship betwen weight and flying time might be overstated. Future work should focus on collecting data actual weight data to better understand its role in flying time.
+
 
 \newpage
 
