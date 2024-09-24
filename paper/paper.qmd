@@ -1,13 +1,11 @@
 ---
-title: "My title"
-subtitle: "My subtitle if needed"
+title: "The impact of physical characteristics on Penguin flight"
 author: 
-  - First author
-  - Another author
+  - Hoang Viet Nguyen
 thanks: "Code and data are available at: LINK."
 date: today
 date-format: long
-abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
+abstract: "This study investigates the relationship between width, length, weight and flying time in penguins. Using a dataset that includes variables such as flying time, width, and length. We found that increased weight is associated lower flying time. "
 format: pdf
 number-sections: true
 bibliography: references.bib
@@ -24,16 +22,16 @@ library(palmerpenguins)
 
 
 # Introduction
+In this study, we investigate the relationship between various physical characteristics of penguins, particularly focusing on weight and flying time as the main variables. Understanding how these variables interact is crucial in the fields of biology and ecology, as they provide insights into the adaptive traits of penguins and their capabilities in flight.
 
-You can and should cross-reference sections and sub-sections. We use @citeR and @rohan.
+Weight is a critical factor that influences the physical performance of penguins. Heavier penguins may face limitations in their flying capabilities due to increased energy requirements for flight. Consequently, flying time can vary significantly based on weight, as heavier individuals may struggle to remain airborne for extended periods.
 
-The remainder of this paper is structured as follows. @sec-data....
+In addition to weight, we explore the effects of wing dimensions, including wing width and length, on flying time. By analyzing a dataset that incorporates these dimensions along with weight, we aim to explain the dynamics of flight in penguins and contribute to the understanding of how physical characteristics affect their ability to fly.
 
-
-
+The remainder of this paper is structured as follows. In Section 2, we describe the data used in our analysis, followed by the modeling approach in Section 3. Section 4 presents the results, and Section 5 discusses the implications of our findings.
 # Data {#sec-data}
 
-Some of our data is of penguins (@fig-bills), from @palmerpenguins.
+Some of our data is of penguins (@fig-bills), from @palmerpenguins which provides insights into the characteristics of different penguins species. The dataset includes measurements such as length and width which serve as useful indicators of various biological attributes.
 
 ```{r}
 #| label: fig-bills
@@ -49,9 +47,7 @@ ggplot(penguins, aes(x = island, fill = species)) +
   coord_flip()
 ```
 
-Talk more about it.
-
-And also planes (@fig-planes). (You can change the height and width, but don't worry about doing that until you have finished every other aspect of the paper - Quarto will try to make it look nice and the defaults usually work well once you have enough text.)
+In addition to penguin data, a scatter plot below shows the relationship between width and length of the penguins which allows us to analyze furthermore.
 
 ```{r}
 #| label: fig-planes
@@ -60,7 +56,7 @@ And also planes (@fig-planes). (You can change the height and width, but don't w
 #| warning: false
 #| message: false
 
-analysis_data <- read_csv(here::here("data/analysis_data/analysis_data.csv"))
+analysis_data <- read_csv(here::here("/Users/nguyenviet/Documents/STA304 - paper 1/data/analysis_data/analysis_data.csv"))
 
 analysis_data |> 
   ggplot(aes(x = width, y = length)) +
@@ -70,17 +66,39 @@ analysis_data |>
        y = "Wing length (mm)")
 ```
 
-Talk way more about it. 
+This scatter plot below takes two variables which are weight and flying time of the penguins. By observing the distribution we can notice the relationship between weight and flying time. Therefore, observing how likely the weight would affect the flying time.
+
+```{r}
+simulated_data <- read_csv(here::here("/Users/nguyenviet/Documents/STA304 - paper 1/data/raw_data/simulated_data.csv"))
+
+simulated_data |>
+  ggplot(aes(x = weight, y = flying_time)) +
+  geom_point(alpha = 0.5) +
+  theme_minimal() +
+  labs(x = "weight", y = "flying time")
+```
 
 
 
 # Model
 
-The goal of our modelling strategy is twofold. Firstly,...
+The goal of our modelling strategy is twofold. Firstly, we aim to investigate the relationship between weight and flying time in penguins, contributing to a deeper understanding of how physical characteristics impact their flight dynamics. Secondly, we have developed a simulation model to create synthetic data that allows us to explore these relationships under controlled conditions.
+
+To simulate our data set, I generated 100 samples for two key variables: flying time and weight. The flying time was derived from a uniform distribution on the existing flying time data in our analysis data, ensuring that the simulated values lie within the range of observed values.
+
+For the weight varible, I generated values from a normal distribution, utilizing the mean and standard deviation of the length variable in the analysis data. This decision was made based on the assumption that weight might ahve a distribution pattern that is reflective of the lengths of the penguins in our data set.
 
 Here we briefly describe the Bayesian analysis model used to investigate... Background details and diagnostics are included in [Appendix -@sec-model-details].
 
 ## Model set-up
+We aim to establish a statistical model that explains the variation in flying time based on the simulated weight of penguins. The relationship can be formally described as:
+\begin{align} y_i &= \beta_0 + \beta_1 \cdot \text{weight}_i + \epsilon_i \ \epsilon_i &\sim \mbox{Normal}(0, \sigma) \end{align}
+
+y_i is the flying time for the ith penguin
+\beta_0 is the intercept,
+\beta_1 represents the effect of weight on flying time,
+\epsilon_i is the error term, assumed to be normally distributed
+
 
 Define $y_i$ as the number of seconds that the plane remained aloft. Then $\beta_i$ is the wing width and $\gamma_i$ is the wing length, both measured in millimeters.  
 
@@ -135,8 +153,9 @@ modelsummary::modelsummary(
 )
 ```
 
-
-
+```{r}
+lm(flying_time ~ weight, data=simulated_data)
+```
 
 # Discussion
 
