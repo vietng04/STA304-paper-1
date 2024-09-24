@@ -11,34 +11,19 @@
 library(tidyverse)
 
 #### Clean data ####
-raw_data <- read_csv("inputs/data/plane_data.csv")
+raw_data <- read_csv("/Users/nguyenviet/Documents/STA304 - paper 1/data/raw_data/raw_data.csv")
 
-cleaned_data <-
-  raw_data |>
-  janitor::clean_names() |>
-  select(wing_width_mm, wing_length_mm, flying_time_sec_first_timer) |>
-  filter(wing_width_mm != "caw") |>
+cleaned_data <- raw_data |>
+  select(Date, Clients, Clients_transported = `Clients transported`, Clients_stationary = `Clients stationary`) |>
+  filter(!is.na(Clients) & !is.na(Clients_transported) & !is.na(Clients_stationary)) |>
   mutate(
-    flying_time_sec_first_timer = if_else(flying_time_sec_first_timer == "1,35",
-                                   "1.35",
-                                   flying_time_sec_first_timer)
-  ) |>
-  mutate(wing_width_mm = if_else(wing_width_mm == "490",
-                                 "49",
-                                 wing_width_mm)) |>
-  mutate(wing_width_mm = if_else(wing_width_mm == "6",
-                                 "60",
-                                 wing_width_mm)) |>
-  mutate(
-    wing_width_mm = as.numeric(wing_width_mm),
-    wing_length_mm = as.numeric(wing_length_mm),
-    flying_time_sec_first_timer = as.numeric(flying_time_sec_first_timer)
-  ) |>
-  rename(flying_time = flying_time_sec_first_timer,
-         width = wing_width_mm,
-         length = wing_length_mm
-         ) |> 
-  tidyr::drop_na()
+    Date = as.Date(Date),
+    Clients = as.numeric(Clients),
+    Clients_transported = as.numeric(Clients_transported),
+    Clients_stationary = as.numeric(Clients_stationary)
+  ) |> 
+  drop_na()
 
 #### Save data ####
-write_csv(cleaned_data, "outputs/data/analysis_data.csv")
+library(readr)
+write_csv(cleaned_data, "/Users/nguyenviet/Documents/STA304 - paper 1/data/analysis_data.csv")
