@@ -14,12 +14,15 @@ library(tidyverse)
 
 #### Simulate data ####
 num_samples <- 100
+start_date <- as.Date("2023-11-15")
+end_date <- as.Date("2024-03-23")
+date_seq <- runif(n = num_samples, min = as.numeric(start_date), max = as.numeric(end_date))
+clients_stationary <- rpois(n = num_samples, lambda = 30)
+clients <- rpois(n = num_samples, lambda = 39)
 
-norm_flying_time <- runif(num_samples, min = min(analysis_data$flying_time), max = max(analysis_data$flying_time))
-
-norm_weight <- rnorm(num_samples, mean(analysis_data$length), sd(analysis_data$length))
-
-simulated_data <- data.frame(flying_time = norm_flying_time, weight = norm_weight)
+simulated_data <- data.frame(dates = date_seq, clients = clients, clients_stationary=clients_stationary)
 
 ### Write_csv
-write_csv(simulated_data, file = "data/raw_data/simulated_data.csv")
+#install.packages("readr")
+library(readr)
+write_csv(simulated_data, file = "/Users/nguyenviet/Documents/STA304 - paper 1/data/raw_data/simulated_data.csv")
