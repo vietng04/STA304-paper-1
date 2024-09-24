@@ -1,11 +1,11 @@
 ---
-title: "The impact of physical characteristics on Penguin flight"
+title: "Analysis of Transport Bus Initiative Usage"
 author: 
   - Hoang Viet Nguyen
 thanks: "Code and data are available at: LINK."
 date: today
 date-format: long
-abstract: "This study investigates the relationship between width, length, weight and flying time in penguins. Using a dataset that includes variables such as flying time, width, and length. We found that increased weight is associated lower flying time. "
+abstract: "This paper presents an analysis of the transport bus initiative usage, with a specific focus on three key variables: clients, clients transported, and clients stationary. The dataset, consisting of daily records, is explored using various statistical distributions to understand the behavior of these variables and assess the performance of the bus initiative."
 format: pdf
 number-sections: true
 bibliography: references.bib
@@ -17,38 +17,19 @@ bibliography: references.bib
 #| message: false
 
 library(tidyverse)
-library(palmerpenguins)
 ```
 
 
 # Introduction
-In this study, we investigate the relationship between various physical characteristics of penguins, particularly focusing on weight and flying time as the main variables. Understanding how these variables interact is crucial in the fields of biology and ecology, as they provide insights into the adaptive traits of penguins and their capabilities in flight.
+Public transportation plays a critical role in urban mobility, connecting individuals to essential services and opportunities while promoting sustainable development. Among the various modes of public transport, bus initiatives are particularly vital, offering affordable and accessible options for diverse populations. In recent years, many cities have implemented transport bus initiatives to enhance public transit services and improve accessibility for underserved communities. However, understanding how these initiatives impact client behavior—specifically the number of clients, those transported, and those who remain stationary—is crucial for evaluating their effectiveness.
 
-Weight is a critical factor that influences the physical performance of penguins. Heavier penguins may face limitations in their flying capabilities due to increased energy requirements for flight. Consequently, flying time can vary significantly based on weight, as heavier individuals may struggle to remain airborne for extended periods.
+This paper focuses on analyzing the usage patterns of a specific transport bus initiative, leveraging data on clients, clients transported, and clients stationary. By examining these metrics, we aim to identify trends and correlations that inform service improvement and highlight the initiative's role in community mobility. We also explore the underlying factors influencing client engagement, including temporal aspects, service reliability, and socio-economic considerations.
 
-In addition to weight, we explore the effects of wing dimensions, including wing width and length, on flying time. By analyzing a dataset that incorporates these dimensions along with weight, we aim to explain the dynamics of flight in penguins and contribute to the understanding of how physical characteristics affect their ability to fly.
+The gap in existing literature on the effectiveness of transport bus initiatives necessitates a detailed analysis of client interactions. Understanding who uses the service and why is vital for transportation planners and policymakers aiming to create inclusive transit systems. Our analysis provides insights into the effectiveness of the bus initiative and its ability to meet the mobility needs of the community.
 
-The remainder of this paper is structured as follows. In Section 2, we describe the data used in our analysis, followed by the modeling approach in Section 3. Section 4 presents the results, and Section 5 discusses the implications of our findings.
+In the subsequent sections, we will detail the methodology used to collect and analyze the data, present key findings, and discuss the implications for public transportation strategies. By focusing on clients, clients transported, and clients stationary, this study contributes valuable knowledge that can guide future enhancements to transport bus initiatives and improve overall public transit experiences.
 # Data {#sec-data}
-
-Some of our data is of penguins (@fig-bills), from @palmerpenguins which provides insights into the characteristics of different penguins species. The dataset includes measurements such as length and width which serve as useful indicators of various biological attributes.
-
-```{r}
-#| label: fig-bills
-#| fig-cap: Bills of penguins
-#| echo: false
-
-ggplot(penguins, aes(x = island, fill = species)) +
-  geom_bar(alpha = 0.8) +
-  scale_fill_manual(values = c("darkorange","purple","cyan4"),
-                    guide = "none") +
-  theme_minimal() +
-  facet_wrap(~species, ncol = 1) +
-  coord_flip()
-```
-
-In addition to penguin data, a scatter plot below shows the relationship between width and length of the penguins which allows us to analyze furthermore.
-
+The histogram visualizes the distribution of Clients Stationary within the dataset, providing insights into how frequently different counts of stationary clients occur. The x-axis represents the number of clients stationary, while the y-axis shows frequency of those counts.
 ```{r}
 #| label: fig-planes
 #| fig-cap: Relationship between wing length and width
@@ -56,191 +37,41 @@ In addition to penguin data, a scatter plot below shows the relationship between
 #| warning: false
 #| message: false
 
-analysis_data <- read_csv(here::here("/Users/nguyenviet/Documents/STA304 - paper 1/data/analysis_data/analysis_data.csv"))
+simulated_data <- read_csv(here::here("/Users/nguyenviet/Documents/STA304 - paper 1/data/raw_data/simulated_data.csv"))
 
-analysis_data |> 
-  ggplot(aes(x = width, y = length)) +
-  geom_point(alpha = 0.8) +
-  theme_minimal() +
-  labs(x = "Wing width (mm)",
-       y = "Wing length (mm)")
+ggplot(simulated_data, aes(x = clients_stationary)) +
+  geom_histogram(binwidth = 5, fill = "blue", color = "black", alpha = 0.7) +
+  labs(title = "Distribution of Clients Stationary", x = "Clients Stationary", y = "Frequency") +
+  theme_minimal()
 ```
 
-This scatter plot below takes two variables which are weight and flying time of the penguins. By observing the distribution we can notice the relationship between weight and flying time. Therefore, observing how likely the weight would affect the flying time.
-
+This scatterplot illustrates the relationship between date and the number of clients in the dataset, providing a visual representation of client engagement over time. The x-axis represents the date, showing the timeline of observation, while the y-axis indicates the number of clients.
 ```{r}
 simulated_data <- read_csv(here::here("/Users/nguyenviet/Documents/STA304 - paper 1/data/raw_data/simulated_data.csv"))
 
-simulated_data |>
-  ggplot(aes(x = weight, y = flying_time)) +
-  geom_point(alpha = 0.5) +
-  theme_minimal() +
-  labs(x = "weight", y = "flying time")
+ggplot(simulated_data, aes(x = dates, y = clients)) +
+  geom_point(color = "red") + 
+  labs(title = "Number of Clients Over Time",
+       x = "Date",
+       y = "Number of Clients") +
+  theme_minimal() +  # Clean theme for better visualization
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
-
-
-
-# Model
-
-The goal of our modelling strategy is twofold. Firstly, we aim to investigate the relationship between weight and flying time in penguins, contributing to a deeper understanding of how physical characteristics impact their flight dynamics. Secondly, we have developed a simulation model to create synthetic data that allows us to explore these relationships under controlled conditions.
-
-To simulate our data set, I generated 100 samples for two key variables: flying time and weight. The flying time was derived from a uniform distribution on the existing flying time data in our analysis data, ensuring that the simulated values lie within the range of observed values.
-
-For the weight varible, I generated values from a normal distribution, utilizing the mean and standard deviation of the length variable in the analysis data. This decision was made based on the assumption that weight might ahve a distribution pattern that is reflective of the lengths of the penguins in our data set.
-
-Here we briefly describe the Bayesian analysis model used to investigate... Background details and diagnostics are included in [Appendix -@sec-model-details].
-
-## Model set-up
-We aim to establish a statistical model that explains the variation in flying time based on the simulated weight of penguins. The relationship can be formally described as:
-
-\begin{align} 
-y_i & = \beta_0 + \beta_1 \cdot \text{weight}_i + \epsilon_i \\ 
-\beta_0 & \text{ is the intercept,} \\ 
-\beta_1 & \text{ represents the effect of weight on flying time,} \\ 
-\epsilon_i & \text{ is the error term, assumed to be normally distributed.} 
-\end{align}
-
-
-
-Define $y_i$ as the number of seconds that the plane remained aloft. Then $\beta_i$ is the wing width and $\gamma_i$ is the wing length, both measured in millimeters.  
-
-\begin{align} 
-y_i|\mu_i, \sigma &\sim \mbox{Normal}(\mu_i, \sigma) \\
-\mu_i &= \alpha + \beta_i + \gamma_i\\
-\alpha &\sim \mbox{Normal}(0, 2.5) \\
-\beta &\sim \mbox{Normal}(0, 2.5) \\
-\gamma &\sim \mbox{Normal}(0, 2.5) \\
-\sigma &\sim \mbox{Exponential}(1)
-\end{align}
-
-We run the model in R [@citeR] using the `rstanarm` package of @rstanarm. We use the default priors from `rstanarm`.
-
-
-### Model justification
-
-We expect a positive relationship between the size of the wings and time spent aloft. In particular...
-
-We can use maths by including latex between dollar signs, for instance $\theta$.
-
 
 # Results
 
-Our results are summarized in @tbl-modelresults.
-
-```{r}
-#| echo: false
-#| eval: true
-#| warning: false
-#| message: false
-
-library(rstanarm)
-
-first_model <-
-  readRDS(file = here::here("models/first_model.rds"))
-```
-
-```{r}
-#| echo: false
-#| eval: true
-#| label: tbl-modelresults
-#| tbl-cap: "Explanatory models of flight time based on wing width and wing length"
-#| warning: false
-
-modelsummary::modelsummary(
-  list(
-    "First model" = first_model
-  ),
-  statistic = "mad",
-  fmt = 2
-)
-```
-
-```{r}
-lm(flying_time ~ weight, data=simulated_data)
-```
 
 # Discussion
 
 ## First discussion point {#sec-first-point}
 
-The analysis of the simulated penguin data, particularly focusing on the relationship between weight and flying time, has led to several key insights. The model suggests a significant association between penguin weight and their flying time, where increases in weight tend to reduce the time spent. This fidings aligns with intuitive biological expectations, as heavier penguins likely face greater maintaining prolonged flight compared to their lighter counterparts.
-
-The linear model. which modeled flying time as a function of weight, demonstrated that even small changes in weight can have a measurable impact on flight duration. These results provide a quantitative basis for understanding the constraints on fligth that weight imposes, potentially influencing the energy expenditure and behavior of penguins during flight.
 ## Second discussion point
 
 ## Third discussion point
 
 ## Weaknesses and next steps
 
-The data set used for this analysis is simulated, meaning the results might not reflect actual biological processes in penguins. Although the simulation aimed to mimic realistic relationships between the variables, empirical data would provide stronger evidence for the conclusions drawn. In addition, the variable weight is not an original measurement of the penguins, it was derived by the using the length variable from the analysis data. While weight is a critical factor for understanding the bio mechanics of flight in real-world scenarios, in this case, its simulation introduces a potential source of bias. The weight does not have direct empirical support from real measurements, and any patterns or correlations identified between weight and flying time may be artifacts of the way the data was generated. This could affect the generalizability of the results to real-world penguin flight dynamics.
-
-Additionally, because weight and length are related in the simulated data, the true variablility in weight that might exist in real penguin populations is not captured. This limitation needs to be considered when interpreting the findings, as the strength of the realtionship betwen weight and flying time might be overstated. Future work should focus on collecting data actual weight data to better understand its role in flying time.
-
-
-\newpage
 
 \appendix
 
-# Appendix {-}
-
-
-# Additional data details
-
-# Model details {#sec-model-details}
-
-## Posterior predictive check
-
-In @fig-ppcheckandposteriorvsprior-1 we implement a posterior predictive check. This shows...
-
-In @fig-ppcheckandposteriorvsprior-2 we compare the posterior with the prior. This shows... 
-
-```{r}
-#| eval: true
-#| echo: false
-#| message: false
-#| warning: false
-#| label: fig-ppcheckandposteriorvsprior
-#| layout-ncol: 2
-#| fig-cap: "Examining how the model fits, and is affected by, the data"
-#| fig-subcap: ["Posterior prediction check", "Comparing the posterior with the prior"]
-
-pp_check(first_model) +
-  theme_classic() +
-  theme(legend.position = "bottom")
-
-posterior_vs_prior(first_model) +
-  theme_minimal() +
-  scale_color_brewer(palette = "Set1") +
-  theme(legend.position = "bottom") +
-  coord_flip()
-```
-
-## Diagnostics
-
-@fig-stanareyouokay-1 is a trace plot. It shows... This suggests...
-
-@fig-stanareyouokay-2 is a Rhat plot. It shows... This suggests...
-
-```{r}
-#| echo: false
-#| eval: true
-#| message: false
-#| warning: false
-#| label: fig-stanareyouokay
-#| fig-cap: "Checking the convergence of the MCMC algorithm"
-#| fig-subcap: ["Trace plot", "Rhat plot"]
-#| layout-ncol: 2
-
-plot(first_model, "trace")
-
-plot(first_model, "rhat")
-```
-
-
-
-\newpage
-
-
 # References
-
-
