@@ -16,10 +16,10 @@ library(tidyverse)
 search_results <- search_packages("transportation")
 head(search_results)
 #### Download data ####
-package <- show_package("36c3b932-4a9c-422a-b187-a3d96037572b")
+package <- show_package("transport-bus-initiative-usage")
 
 # get all resources for this package
-resources <- list_package_resources("36c3b932-4a9c-422a-b187-a3d96037572b")
+resources <- list_package_resources("transport-bus-initiative-usage")
 
 # identify datastore resources; by default, Toronto Open Data sets datastore resource format to CSV for non-geospatial and GeoJSON for geospatial resources
 datastore_resources <- filter(resources, tolower(format) %in% c('csv', 'json'))
@@ -28,6 +28,6 @@ datastore_resources <- filter(resources, tolower(format) %in% c('csv', 'json'))
 data <- filter(datastore_resources, row_number()==1) %>% 
   get_resource()
 
-#### Save data ####
+#### Save data #### 
 # change the_raw_data to whatever name you assigned when you downloaded it.
 write_csv(data, "Documents/STA304 - paper 1/data/raw_data/raw_data.csv")
