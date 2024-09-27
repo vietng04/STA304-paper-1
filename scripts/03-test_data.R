@@ -35,20 +35,3 @@ test_case_10 <- class(data$Clients_stationary) == "numeric"
 test_case_11 <- sum(!is.na(data$Date)) == sum(!is.na(data$Clients)) &&
   sum(!is.na(data$Date)) == sum(!is.na(data$Clients_transported)) &&
   sum(!is.na(data$Date)) == sum(!is.na(data$Clients_stationary))
-
-# Run all tests and print the results
-test_results <- c(
-  "No NA in Date" = test_case_1,
-  "No NA in Clients" = test_case_2,
-  "No NA in Clients_transported" = test_case_3,
-  "No NA in Clients_stationary" = test_case_4,
-  "Date range start" = test_case_5,
-  "Date range end" = test_case_6,
-  "Date is of type Date" = test_case_7,
-  "Clients is numeric" = test_case_8,
-  "Clients_transported is numeric" = test_case_9,
-  "Clients_stationary is numeric" = test_case_10,
-  "All columns have same number of values" = test_case_11
-)
-
-print(test_results)
