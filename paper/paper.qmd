@@ -5,7 +5,7 @@ author:
 thanks: "Code and data are available at: LINK."
 date: today
 date-format: long
-abstract: "This paper presents an analysis of the transport bus initiative usage, with a specific focus on three key variables: clients, clients transported, and clients stationary. The dataset, consisting of daily records, is explored using various statistical distributions to understand the behavior of these variables and assess the performance of the bus initiative."
+abstract: "This paper presents an analysis of the transport bus initiative usage, with a specific focus on three key variables: clients, clients transported, and clients stationary. The dataset, consisting of daily records, is explored using various statistical distributions to understand the behavior of these variables and assess the performance of the bus initiative. By evaluating the distribution relationship between the three key variables, we aim to understand the efficiency of the transport system and identify patterns in client movement. The analysis reveals critical insights into how well the initiative meets transportation demands, contribute to more efficient public transport planning."
 format: pdf
 number-sections: true
 bibliography: references.bib
@@ -21,18 +21,29 @@ library(tidyverse)
 
 
 # Introduction
-Public transportation plays a critical role in urban mobility, connecting individuals to essential services and opportunities while promoting sustainable development. Among the various modes of public transport, bus initiatives are particularly vital, offering affordable and accessible options for diverse populations. In recent years, many cities have implemented transport bus initiatives to enhance public transit services and improve accessibility for underserved communities. However, understanding how these initiatives impact client behavior—specifically the number of clients, those transported, and those who remain stationary—is crucial for evaluating their effectiveness.
+Mass transportation is one of the essential elements of urban and rural mobility of people as it provides them with access to vital services and jobs and also aids in the enhancement of sustainable development. Of the various options of mass transport systems, bus initiatives are very critical in that they provide low-cost and easy to use options for the various populations. In recent years, many cities have implemented transport bus initiatives in a bid to improve the usage of public transport systems and the extent of the population covered by these transport systems. However, it is important to note that, although these initiatives are expected to bring in more targets in the formulation and execution of programs, determining how these initiatives affect the actual behavior of clients remains an area of interest.
 
-This paper focuses on analyzing the usage patterns of a specific transport bus initiative, leveraging data on clients, clients transported, and clients stationary. By examining these metrics, we aim to identify trends and correlations that inform service improvement and highlight the initiative's role in community mobility. We also explore the underlying factors influencing client engagement, including temporal aspects, service reliability, and socio-economic considerations.
+This paper aims to analyze the usage of a particular transport bus initiative, based on the number of clients, clients transported and clients-stationary. In doing so, we seek to examine the usage of the services provided by the initiative and observe patterns in the use of the data which help to improve the services offered and show how the initiative fits within the wider aims of enhancing mobility within the area. The variables determining factors related to the clients' level of engagement with the service include time, the degree of service, and economic aspects.
 
 The gap in existing literature on the effectiveness of transport bus initiatives necessitates a detailed analysis of client interactions. Understanding who uses the service and why is vital for transportation planners and policymakers aiming to create inclusive transit systems. Our analysis provides insights into the effectiveness of the bus initiative and its ability to meet the mobility needs of the community.
 
 In the subsequent sections, we will detail the methodology used to collect and analyze the data, present key findings, and discuss the implications for public transportation strategies. By focusing on clients, clients transported, and clients stationary, this study contributes valuable knowledge that can guide future enhancements to transport bus initiatives and improve overall public transit experiences.
+
 # Data {#sec-data}
-The histogram visualizes the distribution of Clients Stationary within the dataset, providing insights into how frequently different counts of stationary clients occur. The x-axis represents the number of clients stationary, while the y-axis shows frequency of those counts.
+Open Data Toronto provided the data used in this investigation, which covered the years 2023–2024, titled "Transport Bus Initiative Usage". It offers comprehensive details on a transport bus program meant to enhance urban mobility. The number of clients using the transport service overall, the number of clients transported successfully, and the number of clients who stayed stationary make up the three primary variables in the dataset. Every entry is time- and date-stamped, thereby tracking variations in service efficiency and demand over time.
+
+The information provides a comprehensive view of the initiative's performance, allowing for more in-depth examination of transportation patterns. During the data preparation stage, no significant anomalies or missing values were found in any of the variables, which were all organized and tidy. The dataset is a useful tool for assessing Toronto's public transportation system's performance and pinpointing areas that can use improvement.
+
+The transport bus initiative usage analysis is based on three essential variables: clients, clients stationary, and clients transported. The clients variable gives a full picture of overall involvement by reflecting the entire number of people interacting with the transport system. Clients stationary in this sense refers particularly to people who stay at a certain place, emphasizing the need for transportation services and denoting times of high or low activity. Clients transported, on the other hand, measures the precise number of people who were moved, providing information on how well the transport system functions. Transport planners can increase the overall effectiveness of the bus initiative and optimize resource allocation by analyzing the interactions between these elements.
+
+#Results
+## Distribution of Clients Stationary
+The Distribution of clients who are stationary is represented by a histogram that offers significant insights into the behavior of users of the transport bus. The y-axis shows the frequency of those counts, and teh x-axis shows the number of clients who stayed still at different locations.
+
+
 ```{r}
-#| label: fig-planes
-#| fig-cap: Relationship between wing length and width
+#| label: fig-clients-stationary
+#| fig-cap: Distribution of Clients Stationary
 #| echo: false
 #| warning: false
 #| message: false
@@ -40,38 +51,87 @@ The histogram visualizes the distribution of Clients Stationary within the datas
 simulated_data <- read_csv(here::here("/Users/nguyenviet/Documents/STA304 - paper 1/data/raw_data/simulated_data.csv"))
 
 ggplot(simulated_data, aes(x = clients_stationary)) +
-  geom_histogram(binwidth = 5, fill = "blue", color = "black", alpha = 0.7) +
-  labs(title = "Distribution of Clients Stationary", x = "Clients Stationary", y = "Frequency") +
+  geom_histogram(binwidth = 5, fill = "darkred", color = "black", alpha = 0.7) +
+  labs(x = "Clients Stationary", y = "Frequency") +
   theme_minimal()
 ```
 
+The histogram shows that the majority of entries are between 0 and 40 clients, with 30 clients stationary showing the largest frequency. The data seems to be no skew, indicating a perfectly symmetrical distribution. The increase of clients in the beginning stopped until it reaches a peak of 30, then decrease beyond that point. This suggests that while there are times when many clients remain in one location, such occurrences are less frequent. By identifying important areas and times when the demand for transport services may be higher due to stationary clients, these insights might assist transport planners in formulating better service availability strategies during these times.
+
+## Distribution of Clients Transported
+The second histogram displays the distribution of clients transported. Similar to the previous visualization, the x-axis shows the number of clients who were successfully transported, while the y-axis indicates the frequency.
+
+
+```{r}
+#| label: fig-clients-transported
+#| fig-cap: Distribution of Clients Transported
+#| echo: false
+#| warning: false
+#| message: false
+
+simulated_data <- read_csv(here::here("/Users/nguyenviet/Documents/STA304 - paper 1/data/raw_data/simulated_data.csv"))
+
+ggplot(simulated_data, aes(x = clients_transported)) +
+  geom_histogram(binwidth = 5, fill = "pink", color = "black", alpha = 0.7) +
+  labs(x = "Clients Transported", y = "Frequency") +
+  theme_minimal()
+```
+The histogram reveals that the majority of clients transported lies heavily in the negative interval, it indicates that the amount of none clients transported are higher in comparison with the amount of clients that are transported. There is a noticeable drop in frequency as the number of clients transported increases beyond this point. This indicates that while smaller groups are frequently transported, larger groups are transported less often. Understanding this distribution is critical for optimizing bus capacity and scheduling, as it points to typical transport loads and potential under utilization of buses during peak transport times.
+
+
+## Number of Clients
 This scatterplot illustrates the relationship between date and the number of clients in the dataset, providing a visual representation of client engagement over time. The x-axis represents the date, showing the timeline of observation, while the y-axis indicates the number of clients.
 ```{r}
+#| label: fig-clients
+#| fig-cap: Number of Clients over time
+#| echo: false
+#| warning: false
+#| message: false
 simulated_data <- read_csv(here::here("/Users/nguyenviet/Documents/STA304 - paper 1/data/raw_data/simulated_data.csv"))
 
 ggplot(simulated_data, aes(x = dates, y = clients)) +
-  geom_point(color = "red") + 
-  labs(title = "Number of Clients Over Time",
-       x = "Date",
+  geom_line(color = "darkblue") + 
+  geom_point(color = "violet") +
+  labs(x = "Date",
        y = "Number of Clients") +
-  theme_minimal() +  # Clean theme for better visualization
+  theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
-
-# Results
-
-
-# Discussion
-
-## First discussion point {#sec-first-point}
-
-## Second discussion point
-
-## Third discussion point
-
-## Weaknesses and next steps
+This visualization demonstrated the amount of clients over the observed period. Peaks are observed in the range of February and March when the number of clients are surged to 60. Conversely, several dates show a drop to below 50 clients, indicating lower usage. This variation implies that a few occasions or elements, such the state of the weather or neighborhood events, have a big impact on how many customers use the transportation service. Comprehending these trends is essential for allocating supplementary resources during periods of high demand and improving service accessibility during periods of low demand.
 
 
-\appendix
+## Relationship between Clients Stationary and Clients Transported
+The bar chart examines the relationship between clients stationary and clients transported, with the x-axis represents clients stationary while the y-axis shows clients transported.
 
-# References
+
+```{r}
+#| label: fig-planes
+#| fig-cap: Analysis of Clients Stationary vs Clients Transported
+#| echo: false
+#| warning: false
+#| message: false
+simulated_data <- read_csv(here::here("/Users/nguyenviet/Documents/STA304 - paper 1/data/raw_data/simulated_data.csv"))
+
+ggplot(simulated_data, aes(x = clients_stationary, y = clients_transported)) +
+  geom_bar(stat = "identity", fill = "brown") +
+  labs(x = "Clients Stationary",
+       y = "Clients Transported") +
+  theme_minimal()
+```
+The analysis shows that the number of clients transported and the number of clients stationary appear to have little to no relationship. Throughout the observed range, both variables typically exhibit independent and consistent trends. For example, even when ten clients are stationary, the number of clients carried can fluctuate a lot yet still stay mostly steady with no discernible rising or decreasing trend. This lack of correlation shows that the number of clients transferred at any particular time is not directly influenced by the number of clients who remain immobile.
+
+Transport planners must understand this independence because it suggests that strategies to increase service efficiency—instead of depending exclusively on stationary client data—may need to take into account factors other than client stationary, such as route optimization and service frequency adjustments.
+
+
+
+# Discussions
+
+An examination of the transport bus initiative's usage provides important new information about customer behavior and service dynamics. The absence of a substantial correlation between the number of clients moved and the number of clients sedentary is one of the most important findings. Although both variables show oscillations, they don't seem to have a big impact on one another. This independence calls into question theories on the possible correlation between service demand and client behavior by indicating that immobile clients do not directly affect the number of clients being carried at any given time. As a result, transportation planners and regulators must to take into account the possibility that factors other than the sheer presence of clients in stationary places may also impact transportation consumption.
+
+On the other hand, a historical study of clientele shows distinct patterns and trends. Variations in customer involvement can be seen throughout a range of time periods, suggesting that outside variables—like neighborhood gatherings or seasonal changes—have a significant impact on transportation consumption. Significant increases in the number of clients on specific dates, for example, indicate that strategically timed interventions, like raising bus frequency or capacity, could be put into place during peak hours to improve service efficiency. To effectively build public transport policies that adapt to actual demand rather than assumptions based purely on stationary counts, it is imperative to comprehend these temporal trends.
+
+# Limitations
+
+Although the results add significant insights to the subject of transportation planning, it is essential to recognize some obvious limits within the dataset. The raw data is significant since it shows cases in which no clients were transported, which raises questions regarding the data's reliability. These gaps in the transport data could be caused by a number of events, such as possible reporting errors or neglect to gather data during periods of low activity. These restrictions could compromise the analysis's robustness by masking actual usage patterns and resulting in incorrect interpretations of client behavior. To increase the accuracy and dependability of the results, future research should make an effort to guarantee more thorough data gathering procedures and include extra factors that take into account outside impacts on transportation usage.
+
+In conclusion, this analysis highlights how complex customer behavior is within the transit bus system. The absence of a relationship between clients who are transported and clients who remain stationary implies that when organizing transport services, a comprehensive strategy is required. Simultaneously, knowing the seasonal trends in client provides useful information for improving service delivery. In order to ensure that public transportation programs successfully serve community needs and to improve the credibility of future research in this field, it will be necessary to address the constraints of the dataset.
